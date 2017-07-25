@@ -1,6 +1,5 @@
 package me.reske.kraken;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.crypto.Mac;
@@ -16,6 +15,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import static me.reske.kraken.KrakenUtils.handleResponse;
 
 /**
  * @author Dirk Reske
@@ -91,24 +92,16 @@ abstract class KrakenClientBase {
      * @return the api response
      */
     private JSONObject performRequest(String path, Map<String, String> parameters, boolean isPrivate) {
-        JSONObject response = null;
+        String response = null;
         try {
             response = execute(path, parameters, isPrivate);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
 
-        if (response == null) {
-            throw new IllegalArgumentException("Invalid response");
-        }
-
-        JSONArray error = response.getJSONArray("error");
-        if (error != null && error.length() > 0) {
-            throw new IllegalArgumentException(error.getString(0));
-        }
-
-        return response.getJSONObject("result");
+        return handleResponse(response);
     }
+
 
     /**
      * Performs an API request.
@@ -117,7 +110,7 @@ abstract class KrakenClientBase {
      * @param parameters paremters
      * @param isPrivate  {@code true} if this is a private request; {@code false} if not
      */
-    private JSONObject execute(String path, Map<String, String> parameters, boolean isPrivate) throws IOException {
+    private String execute(String path, Map<String, String> parameters, boolean isPrivate) throws IOException {
         if (parameters == null) {
             parameters = new HashMap<>();
         }
@@ -149,13 +142,12 @@ abstract class KrakenClientBase {
 
         if (connection.getResponseCode() == 200) {
             InputStream inputStream = connection.getInputStream();
-            String response = readResponse(inputStream);
-
-            return new JSONObject(response);
+            return readResponse(inputStream);
+        } else {
+            //TODO error handling
+            return null;
         }
 
-        //TODO error handling
-        return null;
     }
 
     /**

@@ -196,9 +196,10 @@ public class KrakenClient extends KrakenClientBase {
 
     public List<Order> getOpenOrders() {
         JSONObject result = privateRequest("/0/private/OpenOrders", null);
+        JSONObject open = result.getJSONObject("open");
         List<Order> orders = new ArrayList<>();
-        for (String txId : result.keySet()) {
-            orders.add(new Order(txId, result.getJSONObject(txId)));
+        for (String txId : open.keySet()) {
+            orders.add(new Order(txId, open.getJSONObject(txId)));
         }
         return orders;
     }

@@ -1,0 +1,28 @@
+{
+  "open": {
+    "O3RVAH-7JIF7-A5IVHQ": {
+      "opentm": 1.501014034583E9,
+      "oflags": "fciq",
+      "cost": "0.00000",
+      "expiretm": 0,
+      "fee": "0.00000",
+      "vol_exec": "0.00000000",
+      "starttm": 0,
+      "descr": {
+        "leverage": "none",
+        "price": "1000.000",
+        "type": "buy",
+        "pair": "XBTEUR",
+        "ordertype": "limit",
+        "price2": "0",
+        "order": "buy 1.00000000 XBTEUR @ limit 1000.000"
+      },
+      "vol": "1.00000000",
+      "userref": null,
+      "price": "0.00000",
+      "refid": null,
+      "status": "open",
+      "misc": ""
+    }
+  }
+}
